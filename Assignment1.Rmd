@@ -107,13 +107,80 @@ sum(is.na(activity_data$steps))
 
 For a given day, it is either NA or not. It cannot contain intervals with NA and some without for the same day.
 
-Therefore, replacing it with average values can be done.
+Therefore, replacing it with **average values** can be done.
 
 ```{r, echo=TRUE}
 num_naPerDay <- summarise(by_date, sum(is.na(activity_data$steps)))
 unique(num_naPerDay[,2])
 sum(is.na(StepsPerDay[,2]))
 ````
+##### 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+
+Replace NA by average
+
+```{r, echo=TRUE}
+activity_data_imputed <- activity_data
+activity_data_imputed$steps <- impute(activity_data$steps, fun=mean)
+````
 
 
+##### 4. Make a histogram of the total number of steps taken each day 
+```{r hist 2, echo=TRUE}
+steps_perDayImputed <- group_by(activity_data_imputed, date)
+stepsPerDayImputed <- summarise(steps_perDayImputed, sum(steps))
 
+hist(stepsPerDayImputed$`sum(steps)`, breaks=10, main="Total number of steps (Replacing NA's)",
+     xlab="Number of steps per day",
+     ylab="Frequency")
+
+````
+
+##### 4.1 Calculate and report the mean and median total number of steps taken per day. 
+
+```{r, echo=TRUE}
+mean(stepsPerDayImputed$`sum(steps)`)
+````
+
+```{r, echo=TRUE}
+median(stepsPerDayImputed$`sum(steps)`)
+```
+#### 4.2 What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+The mean stays equal to the estimate from the first part of the assignment, because adding the average does not change the average of the resulting sequence.
+
+The median has changed, because the number of days has changed. However, the total number of steps is now equal to the average of the total number of steps taken per day.
+
+## Are there differences in activity patterns between weekdays and weekends?
+
+##### 1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+
+```{r, echo=TRUE}
+activity_data_imputed$dateType <-  ifelse(as.POSIXlt(stepsPerDayImputed$date)$wday %in% c(0,6), 'weekend', 'weekday')
+```
+
+
+##### 2. Make a panel plot containing a time series plot
+
+```{r, echo=TRUE}
+weekday_interval <- group_by(activity_data_imputed, interval, dateType)
+
+average_stepsPerIntervalWeekday <- summarise(weekday_interval, mean(steps))
+```
+
+
+```{r  panel plot, echo=TRUE, fig.width = 12}
+par(mfrow = c(1, 2), mar = c(4, 4, 6, 1))
+plot(subset(average_stepsPerIntervalWeekday, dateType == "weekday")$interval,
+     subset(average_stepsPerIntervalWeekday, dateType == "weekday")$`mean(steps)`,
+     type = "l",
+     main = "Weekdays",
+     xlab = "Interval",
+     ylab = "Average Number of Steps")
+plot(subset(average_stepsPerIntervalWeekday, dateType == "weekend")$interval,
+     subset(average_stepsPerIntervalWeekday, dateType == "weekend")$`mean(steps)`,
+     type = "l",
+     main = "Weekends",
+     xlab = "Interval",
+     ylab = "Average Number of Steps")
+title(main="Average Number of Steps taken in Interval", outer = T)
+```
