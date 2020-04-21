@@ -1,0 +1,119 @@
+Reproducible Research -- Assignment 1
+=====================================
+
+## Introduction
+
+This assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.
+
+The variables included in the analysed dataset are:
+
+- **steps**: Number of steps taking in a 5-minute interval (missing values are coded as NA)
+- **date**: The date on which the measurement was taken in YYYY-MM-DD format
+- **interval**: Identifier for the 5-minute interval in which measurement was taken
+
+
+
+The dataset is stored in a comma-separated-value (CSV) file and there are a total of 17,568 observations in this dataset.
+
+
+````{r, echo=FALSE, results='hide', warning=FALSE, message=FALSE}
+library(ggplot2)
+library(scales)
+library(Hmisc)
+library(dplyr)
+````
+
+## Loading and preprocessing data
+
+##### 1. Load the data (i.e. read.csv())
+Data loaded from working directory into variable 'activity_data':
+
+````{r}
+activity_data <- read.csv("activity.csv")
+````
+
+## What is the mean total number of steps taken per day?
+
+
+##### 1. Total number of steps taken per day
+The number of steps taken for each day is the total sum of steps divided by number of days.
+
+```{r, echo=TRUE}
+ sum(activity_data$steps, na.rm = TRUE)/length(unique(activity_data$date))
+```
+
+##### 2. Make a histogram of the total number of steps taken each day
+
+````{r hist 1, echo=TRUE}
+by_date <- group_by(activity_data, date)
+StepsPerDay <- summarise(by_date, sum(steps))
+
+hist(StepsPerDay$`sum(steps)`,
+     breaks = 10,
+     main = "Number of Steps per Day",
+     xlab = "Steps per day",
+     ylab = "Frequency")
+
+````
+
+##### 3. Mean and median of number of steps by day
+
+
+```{r, echo=TRUE}
+mean(StepsPerDay$`sum(steps)`, na.rm= TRUE)
+```
+
+```{r, echo=TRUE}
+median(StepsPerDay$`sum(steps)`, na.rm = TRUE)
+```
+
+
+## What is the average daily activity pattern?
+To determine the average daily activity pattern, the dataset contains information about the intervals.
+
+```{r, echo=TRUE}
+stepsPerInterval <- group_by(activity_data, interval)
+average_stepsPerInterval <- summarise(stepsPerInterval, mean(steps, na.rm = TRUE))
+```
+
+##### 1. Make a time series plot
+
+```{r time series plot, echo=TRUE}
+plot(average_stepsPerInterval, type="l", main="Average number of steps per each Interval",
+     xlab="Intervals",
+     ylab="Avg number of steps")
+```
+
+##### 2. Which 5 minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+
+```{r, echo=TRUE}
+maximum_interval_i <- which(average_stepsPerInterval[,2] == max(average_stepsPerInterval[,2]))
+maximum_interval <- average_stepsPerInterval[maximum_interval_i, 1]
+as.numeric(maximum_interval)
+```
+
+* Most Steps at interval: `r maximum_interval`
+
+
+## Imputing missing values
+
+##### 1. Calculate and report the total number of missing values in the dataset 
+```{r, echo=TRUE}
+sum(is.na(activity_data$steps))
+```
+
+
+##### 2. Strategy for filling in all of the missing values in the dataset
+
+For a given day, it is either NA or not. It cannot contain intervals with NA and some without for the same day.
+
+Therefore, replacing it with average values can be done.
+
+```{r, echo=TRUE}
+num_naPerDay <- summarise(by_date, sum(is.na(activity_data$steps)))
+unique(num_naPerDay[,2])
+sum(is.na(StepsPerDay[,2]))
+````
+
+
+
