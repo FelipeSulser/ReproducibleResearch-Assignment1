@@ -159,7 +159,7 @@ activity_data_imputed$dateType <-  ifelse(as.POSIXlt(stepsPerDayImputed$date)$wd
 ```
 
 
-##### 2. Make a panel plot containing a time series plot
+##### 2. Make a panel plot containing a time series plot .
 
 ```{r, echo=TRUE}
 weekday_interval <- group_by(activity_data_imputed, interval, dateType)
