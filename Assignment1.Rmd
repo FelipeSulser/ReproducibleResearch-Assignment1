@@ -30,7 +30,7 @@ library(dplyr)
 
 ## Loading and preprocessing data
 
-##### 1. Load the data (i.e. read.csv())
+##### 1. Load the data (i.e. read.csv()).
 Data loaded from working directory into variable 'activity_data':
 
 ````{r}
