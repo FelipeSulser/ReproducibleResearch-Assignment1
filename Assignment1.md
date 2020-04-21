@@ -25,7 +25,7 @@ The dataset is stored in a comma-separated-value (CSV) file and there are a tota
 
 ## Loading and preprocessing data
 
-##### 1. Load the data (i.e. read.csv())
+##### 1. Load the data (i.e. read.csv()).
 Data loaded from working directory into variable 'activity_data':
 
 
@@ -62,7 +62,7 @@ hist(StepsPerDay$`sum(steps)`,
      ylab = "Frequency")
 ```
 
-![](Assignment1_files/figure-html/hist 1-1.png)<!-- -->
+![](Assignment1_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
 ##### 3. Mean and median of number of steps by day
 
@@ -104,7 +104,7 @@ plot(average_stepsPerInterval, type="l", main="Average number of steps per each 
      ylab="Avg number of steps")
 ```
 
-![](Assignment1_files/figure-html/time series plot-1.png)<!-- -->
+![](Assignment1_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 ##### 2. Which 5 minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -183,7 +183,7 @@ hist(stepsPerDayImputed$`sum(steps)`, breaks=10, main="Total number of steps (Re
      ylab="Frequency")
 ```
 
-![](Assignment1_files/figure-html/hist 2-1.png)<!-- -->
+![](Assignment1_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 ##### 4.1 Calculate and report the mean and median total number of steps taken per day. 
 
@@ -248,4 +248,4 @@ plot(subset(average_stepsPerIntervalWeekday, dateType == "weekend")$interval,
 title(main="Average Number of Steps taken in Interval", outer = T)
 ```
 
-![](Assignment1_files/figure-html/panel plot-1.png)<!-- -->
+![](Assignment1_files/figure-html/unnamed-chunk-18-1.png)<!-- -->

@@ -49,7 +49,7 @@ The number of steps taken for each day is the total sum of steps divided by numb
 
 ##### 2. Make a histogram of the total number of steps taken each day
 
-````{r hist 1, echo=TRUE}
+````{r, echo=TRUE}
 by_date <- group_by(activity_data, date)
 StepsPerDay <- summarise(by_date, sum(steps))
 
@@ -83,7 +83,7 @@ average_stepsPerInterval <- summarise(stepsPerInterval, mean(steps, na.rm = TRUE
 
 ##### 1. Make a time series plot
 
-```{r time series plot, echo=TRUE}
+```{r, echo=TRUE}
 plot(average_stepsPerInterval, type="l", main="Average number of steps per each Interval",
      xlab="Intervals",
      ylab="Avg number of steps")
@@ -130,7 +130,7 @@ activity_data_imputed$steps <- impute(activity_data$steps, fun=mean)
 
 
 ##### 4. Make a histogram of the total number of steps taken each day 
-```{r hist 2, echo=TRUE}
+```{r, echo=TRUE}
 steps_perDayImputed <- group_by(activity_data_imputed, date)
 stepsPerDayImputed <- summarise(steps_perDayImputed, sum(steps))
 
@@ -173,7 +173,7 @@ average_stepsPerIntervalWeekday <- summarise(weekday_interval, mean(steps))
 ```
 
 
-```{r  panel plot, echo=TRUE, fig.width = 12}
+```{r, echo=TRUE, fig.width = 12}
 par(mfrow = c(1, 2), mar = c(4, 4, 6, 1))
 plot(subset(average_stepsPerIntervalWeekday, dateType == "weekday")$interval,
      subset(average_stepsPerIntervalWeekday, dateType == "weekday")$`mean(steps)`,
